@@ -1,0 +1,223 @@
+# Créé par snity, le 12/11/2021 en Python 3.7
+"""
+Programme réalisé par Pignon Charlotte et Yohannes.S Snit, 1G1
+"""
+
+
+
+import pygame
+import _tkinter
+import sys
+from PIL import Image, ImageDraw, ImageFont
+import turtle
+
+
+
+
+map ="""
+"    O",
+"O   l",
+"l  OXO",
+"OXlO",
+"l",
+"O",
+]"""
+
+
+
+pygame.init()
+screen = pygame.display.set_mode((900,800), #pygame.RESIZABLE)   # Flag pygame.RESIZABLE
+pygame.display.set_caption("Keboard Input")
+pygame.display.set_caption("LATE COMER")
+font = pygame.font.Font("freesansbold.ttf", 20)
+school_entry = pygame.image.load("touchard.jpg")
+classroom_batA0 = pygame.image.load("classroom_batA0.jpg")
+classroom_batA1 = pygame.image.load("classroom_batA1.jpg")
+classroom_batB1 = pygame.image.load("classroom_batB1.jpg")
+classroom_batC1 = pygame.image.load("classroom_batC1.jpg")
+classroom_batD1 = pygame.image.load("classroom_batD1.jpg")
+classroom_batE1 = pygame.image.load("classroom_batE1.jpg")
+la_vie_scolaire = pygame.image.load("la_vie_scolaire.jpg")
+escaliers_montant = pygame.image.load("escaliers_montant.jpg")
+escaliers_descendant = pygame.image.load("escaliers_descendant.jpg")
+couloir = pygame.image.load("couloir.jpg")
+closed_classroom = pygame.image.load("closed_classroom.jpg")
+
+alert0 = font.render("you've arrived at your school 2 minutes late." , True, (0, 0, 0))
+alert1 = font.render("You are in your class but there is no one there. Your teacher and classmates must have changed to another class. There are five possible classrooms that they could be in. YOUR TURN TO FIND THEM! ", True, (0, 0, 0))
+alert2 = font.render("This classroom is empty", True, (0, 0, 0))
+alert3 = font.render("This classroom is empty too", True, (0, 0, 0))
+alert4 = font.render("Nope! No one is here", True, (0, 0, 0))
+alert5 = font.render("No chance they're not here either", True, (0, 0, 0))
+alert6 = font.render("This is the right room! But you're too late you'll have to bring an excuse paper from la vie scolaire ", True, (0, 0, 0))
+alert7 = font.render("You're in la vie scolaire. You can collect your green paper", True, (0, 0, 0))
+alert8 = font.render("You've made it!! You can join your classmates now.", True, (0, 0, 0))
+
+
+
+
+
+pposition = 1
+
+def description(room):
+
+    if room == 1:
+        screen.blit(school_entry,(0,0))
+        screen.blit(alert0, (0,600))
+
+    elif room == 11:
+        screen.blit(classroom_batA0, (0,0))
+        screen.blit(alert1, (0,600))
+
+    elif room == 2:
+        screen.blit(classroom_batA1, (0,0))
+        screen.blit(alert2, (0,600))
+
+    elif room == 3:
+        screen.blit(classroom_batB1, (0,0))
+        screen.blit(alert3, (0,600))
+
+    elif room == 4:
+        screen.blit(classroom_batC1, (0,0))
+        screen.blit(alert4, (0,600))
+
+    elif room == 5:
+        screen.blit(classroom_batD1, (0,0))
+        screen.blit(alert5, (0,600))
+
+    elif room == 6:
+        screen.blit(closed_room, (0,0))
+        screen.blit(alert6, (0,600))
+
+    elif room == 7:
+        screen.blit(la_vie_scolaire, (0,0))
+        screen.blit(alert7, (0,600))
+
+    elif room == 8:
+        screen.blit(escaliers_montant, (0,0))
+
+
+    elif room == 9:
+        screen.blit(escaliers_descendant, (0,0))
+
+
+    elif room == 10:
+        screen.blit(classroom_batE1, (0,0))
+        screen.blit(alert8, (0,600))
+
+    elif room == 12:
+        screen.blit(couloir,(0,0))
+
+
+
+
+
+# MOUVEMENT
+room=1
+
+def decision(position,room):
+    print("where do you wanna go", position)
+    memoriseRoom = room
+    if position == "n":
+        if room==1:
+            room=11
+            memoriseRoom = room
+        elif position == "s" or "o" or "e":
+            print ("the entry to the school is to your north")
+
+
+
+    if room == 11:
+        if position == "o":
+            room=8
+            print("you've reached the stairs. Go to the right to Bat C and to the left to Bat B")
+        elif position == "e":
+            room = 12
+    if room == 8:
+        if position == "e":
+            room = 4
+        elif position == "n":
+            room = 2
+
+    if room == 8:
+        if position == "n":
+            room = 3
+
+    if room == 3:
+        if position == "s":
+            room = 9
+
+        elif position == "o":
+            room = 12
+
+    if room == 4:
+        if position == "o":
+            room = 9
+
+    if room == 9:
+        if position== "n":
+            room = 11
+        elif position == "e":
+            room = 7
+
+
+    if room == 12:
+        if position == "n":
+            room = 8
+        elif position == "o":
+            room = 5
+        elif position == "e":
+            room = 6
+        elif position == "s":
+            room = 2
+
+    if room == 2:
+        if position == "n" and "o":
+            room = 12
+        elif position == "s":
+            room = 9
+
+    if room == 5:
+        if position == "s":
+            room = 12
+
+    if room == 6:
+        if position == "o":
+            room = 12
+
+    if room == 7:
+        if position == "o":
+            room = 8
+
+
+    return room
+
+
+
+
+loop = True
+
+while loop==True:
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+                loop = False            #fermeture de la fenetre (croix rouge)
+        elif event.type == pygame.KEYDOWN:  #lecture du clavier
+                pposition =decision(event.unicode,pposition)
+                if event.unicode == 'q': #touche q pour quitter
+                  loop = False
+    pygame.draw.line(gameDisplay, red, (120,215), (100,100), 5)
+    pygame.draw.rect(gameDisplay, silver,(120,215,0,0))
+    pygame.draw.polygon(gameDisplay, green, ((25,75),(76,125),(250,375),(400,25),(60,540)))
+
+    description(pposition)
+    # Actualisation de l'affichage
+    pygame.display.flip()
+
+pygame.quit()
+
+
+
+
+
+
